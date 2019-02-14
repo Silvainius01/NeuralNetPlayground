@@ -1,0 +1,1876 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: 0.25
+    backfaceThreshold: 100
+  m_SceneGUID: 00000000000000000000000000000000
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 8
+  m_Fog: 0
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: 0.01
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 3
+  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SkyboxMaterial: {fileID: 0}
+  m_HaloStrength: 0.5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
+  m_DefaultReflectionMode: 0
+  m_DefaultReflectionResolution: 128
+  m_ReflectionBounces: 1
+  m_ReflectionIntensity: 1
+  m_CustomReflection: {fileID: 0}
+  m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 11
+  m_GIWorkflowMode: 1
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_TemporalCoherenceThreshold: 1
+    m_EnvironmentLightingMode: 0
+    m_EnableBakedLightmaps: 0
+    m_EnableRealtimeLightmaps: 0
+  m_LightmapEditorSettings:
+    serializedVersion: 9
+    m_Resolution: 2
+    m_BakeResolution: 40
+    m_TextureWidth: 1024
+    m_TextureHeight: 1024
+    m_AO: 0
+    m_AOMaxDistance: 1
+    m_CompAOExponent: 1
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
+    m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
+    m_TextureCompression: 1
+    m_FinalGather: 0
+    m_FinalGatherFiltering: 1
+    m_FinalGatherRayCount: 256
+    m_ReflectionCompression: 2
+    m_MixedBakeMode: 2
+    m_BakeBackend: 0
+    m_PVRSampling: 1
+    m_PVRDirectSampleCount: 32
+    m_PVRSampleCount: 500
+    m_PVRBounces: 2
+    m_PVRFilterTypeDirect: 0
+    m_PVRFilterTypeIndirect: 0
+    m_PVRFilterTypeAO: 0
+    m_PVRFilteringMode: 1
+    m_PVRCulling: 1
+    m_PVRFilteringGaussRadiusDirect: 1
+    m_PVRFilteringGaussRadiusIndirect: 5
+    m_PVRFilteringGaussRadiusAO: 2
+    m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+    m_PVRFilteringAtrousPositionSigmaIndirect: 2
+    m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ShowResolutionOverlay: 1
+  m_LightingDataAsset: {fileID: 0}
+  m_UseShadowmask: 1
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 2
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.4
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    minRegionArea: 2
+    manualCellSize: 0
+    cellSize: 0.16666667
+    manualTileSize: 0
+    tileSize: 256
+    accuratePlacement: 0
+    debug:
+      m_Flags: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &2823314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2823318}
+  - component: {fileID: 2823317}
+  - component: {fileID: 2823316}
+  - component: {fileID: 2823315}
+  m_Layer: 0
+  m_Name: Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &2823315
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2823314}
+  m_Enabled: 1
+--- !u!124 &2823316
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2823314}
+  m_Enabled: 1
+--- !u!20 &2823317
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2823314}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &2823318
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2823314}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -50}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &266024941
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 266024943}
+  - component: {fileID: 266024942}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &266024942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 266024941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b72054e2c976b26428012705a78abe21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphMaker: {fileID: 833658572}
+  nodePrefab: {fileID: 1142373863354088, guid: 952086d659a1875429390462660c7508, type: 2}
+  m_resourceList:
+  - m_name: Food
+  - m_name: Wood
+  - m_name: Gold
+  m_buildingList:
+  - m_name: Farm
+    m_buildingType: 0
+    buildingCostList:
+    - value: 100
+      resource:
+        m_name: Wood
+    - value: 100
+      resource:
+        m_name: Gold
+    buildingIncomeList:
+    - value: 5
+      resource:
+        m_name: Food
+  - m_name: Lumberyard
+    m_buildingType: 0
+    buildingCostList:
+    - value: 100
+      resource:
+        m_name: Wood
+    - value: 100
+      resource:
+        m_name: Gold
+    buildingIncomeList:
+    - value: 5
+      resource:
+        m_name: Wood
+  - m_name: Market
+    m_buildingType: 0
+    buildingCostList:
+    - value: 100
+      resource:
+        m_name: Wood
+    - value: 100
+      resource:
+        m_name: Gold
+    buildingIncomeList:
+    - value: 5
+      resource:
+        m_name: Gold
+  m_maxBuildingTypesList:
+  - max: 5
+    type: 0
+  - max: 5
+    type: 1
+  - max: 5
+    type: 2
+  expansionCost:
+  - value: 50
+    resource:
+      m_name: Food
+  - value: 50
+    resource:
+      m_name: Wood
+  - value: 50
+    resource:
+      m_name: Gold
+--- !u!4 &266024943
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 266024941}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -19.082075, y: 4.2162185, z: -0.08947937}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &833658571
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 833658573}
+  - component: {fileID: 833658572}
+  m_Layer: 0
+  m_Name: GraphMaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &833658572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 833658571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf3838c7e9fa4341911121eb5d70c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanGraph: 0
+  boardDimensions: {x: 10, y: 10}
+  squareSideSize: 5
+  generateBoard: 0
+  generateBlocks: 0
+  generateDiagnols: 0
+  generateRandomDiagnols: 0
+  diagChance: 0.05
+  blockCreationChance: 0.2
+  numBlocks: 0
+  numConnections: 180
+  graphPoints:
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 1
+      dist: 5
+    - index: 10
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 0
+      dist: 5
+    - index: 2
+      dist: 5
+    - index: 11
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 1
+      dist: 5
+    - index: 3
+      dist: 5
+    - index: 12
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 2
+      dist: 5
+    - index: 4
+      dist: 5
+    - index: 13
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 3
+      dist: 5
+    - index: 5
+      dist: 5
+    - index: 14
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 4
+      dist: 5
+    - index: 6
+      dist: 5
+    - index: 15
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 5
+      dist: 5
+    - index: 7
+      dist: 5
+    - index: 16
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 6
+      dist: 5
+    - index: 8
+      dist: 5
+    - index: 17
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 7
+      dist: 5
+    - index: 9
+      dist: 5
+    - index: 18
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 8
+      dist: 5
+    - index: 19
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 0
+      dist: 5
+    - index: 11
+      dist: 5
+    - index: 20
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 1
+      dist: 5
+    - index: 10
+      dist: 5
+    - index: 12
+      dist: 5
+    - index: 21
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 2
+      dist: 5
+    - index: 11
+      dist: 5
+    - index: 13
+      dist: 5
+    - index: 22
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 3
+      dist: 5
+    - index: 12
+      dist: 5
+    - index: 14
+      dist: 5
+    - index: 23
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 4
+      dist: 5
+    - index: 13
+      dist: 5
+    - index: 15
+      dist: 5
+    - index: 24
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 5
+      dist: 5
+    - index: 14
+      dist: 5
+    - index: 16
+      dist: 5
+    - index: 25
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 6
+      dist: 5
+    - index: 15
+      dist: 5
+    - index: 17
+      dist: 5
+    - index: 26
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 7
+      dist: 5
+    - index: 16
+      dist: 5
+    - index: 18
+      dist: 5
+    - index: 27
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 8
+      dist: 5
+    - index: 17
+      dist: 5
+    - index: 19
+      dist: 5
+    - index: 28
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 9
+      dist: 5
+    - index: 18
+      dist: 5
+    - index: 29
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 10
+      dist: 5
+    - index: 21
+      dist: 5
+    - index: 30
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 11
+      dist: 5
+    - index: 20
+      dist: 5
+    - index: 22
+      dist: 5
+    - index: 31
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 12
+      dist: 5
+    - index: 21
+      dist: 5
+    - index: 23
+      dist: 5
+    - index: 32
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 13
+      dist: 5
+    - index: 22
+      dist: 5
+    - index: 24
+      dist: 5
+    - index: 33
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 14
+      dist: 5
+    - index: 23
+      dist: 5
+    - index: 25
+      dist: 5
+    - index: 34
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 15
+      dist: 5
+    - index: 24
+      dist: 5
+    - index: 26
+      dist: 5
+    - index: 35
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 16
+      dist: 5
+    - index: 25
+      dist: 5
+    - index: 27
+      dist: 5
+    - index: 36
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 17
+      dist: 5
+    - index: 26
+      dist: 5
+    - index: 28
+      dist: 5
+    - index: 37
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 18
+      dist: 5
+    - index: 27
+      dist: 5
+    - index: 29
+      dist: 5
+    - index: 38
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 19
+      dist: 5
+    - index: 28
+      dist: 5
+    - index: 39
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 20
+      dist: 5
+    - index: 31
+      dist: 5
+    - index: 40
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 21
+      dist: 5
+    - index: 30
+      dist: 5
+    - index: 32
+      dist: 5
+    - index: 41
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 22
+      dist: 5
+    - index: 31
+      dist: 5
+    - index: 33
+      dist: 5
+    - index: 42
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 23
+      dist: 5
+    - index: 32
+      dist: 5
+    - index: 34
+      dist: 5
+    - index: 43
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 24
+      dist: 5
+    - index: 33
+      dist: 5
+    - index: 35
+      dist: 5
+    - index: 44
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 25
+      dist: 5
+    - index: 34
+      dist: 5
+    - index: 36
+      dist: 5
+    - index: 45
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 26
+      dist: 5
+    - index: 35
+      dist: 5
+    - index: 37
+      dist: 5
+    - index: 46
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 27
+      dist: 5
+    - index: 36
+      dist: 5
+    - index: 38
+      dist: 5
+    - index: 47
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 28
+      dist: 5
+    - index: 37
+      dist: 5
+    - index: 39
+      dist: 5
+    - index: 48
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 29
+      dist: 5
+    - index: 38
+      dist: 5
+    - index: 49
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 30
+      dist: 5
+    - index: 41
+      dist: 5
+    - index: 50
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 31
+      dist: 5
+    - index: 40
+      dist: 5
+    - index: 42
+      dist: 5
+    - index: 51
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 32
+      dist: 5
+    - index: 41
+      dist: 5
+    - index: 43
+      dist: 5
+    - index: 52
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 33
+      dist: 5
+    - index: 42
+      dist: 5
+    - index: 44
+      dist: 5
+    - index: 53
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 34
+      dist: 5
+    - index: 43
+      dist: 5
+    - index: 45
+      dist: 5
+    - index: 54
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 35
+      dist: 5
+    - index: 44
+      dist: 5
+    - index: 46
+      dist: 5
+    - index: 55
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 36
+      dist: 5
+    - index: 45
+      dist: 5
+    - index: 47
+      dist: 5
+    - index: 56
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 37
+      dist: 5
+    - index: 46
+      dist: 5
+    - index: 48
+      dist: 5
+    - index: 57
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 38
+      dist: 5
+    - index: 47
+      dist: 5
+    - index: 49
+      dist: 5
+    - index: 58
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 39
+      dist: 5
+    - index: 48
+      dist: 5
+    - index: 59
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 40
+      dist: 5
+    - index: 51
+      dist: 5
+    - index: 60
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 41
+      dist: 5
+    - index: 50
+      dist: 5
+    - index: 52
+      dist: 5
+    - index: 61
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 42
+      dist: 5
+    - index: 51
+      dist: 5
+    - index: 53
+      dist: 5
+    - index: 62
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 43
+      dist: 5
+    - index: 52
+      dist: 5
+    - index: 54
+      dist: 5
+    - index: 63
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 44
+      dist: 5
+    - index: 53
+      dist: 5
+    - index: 55
+      dist: 5
+    - index: 64
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 45
+      dist: 5
+    - index: 54
+      dist: 5
+    - index: 56
+      dist: 5
+    - index: 65
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 46
+      dist: 5
+    - index: 55
+      dist: 5
+    - index: 57
+      dist: 5
+    - index: 66
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 47
+      dist: 5
+    - index: 56
+      dist: 5
+    - index: 58
+      dist: 5
+    - index: 67
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 48
+      dist: 5
+    - index: 57
+      dist: 5
+    - index: 59
+      dist: 5
+    - index: 68
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 49
+      dist: 5
+    - index: 58
+      dist: 5
+    - index: 69
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 50
+      dist: 5
+    - index: 61
+      dist: 5
+    - index: 70
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 51
+      dist: 5
+    - index: 60
+      dist: 5
+    - index: 62
+      dist: 5
+    - index: 71
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 52
+      dist: 5
+    - index: 61
+      dist: 5
+    - index: 63
+      dist: 5
+    - index: 72
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 53
+      dist: 5
+    - index: 62
+      dist: 5
+    - index: 64
+      dist: 5
+    - index: 73
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 54
+      dist: 5
+    - index: 63
+      dist: 5
+    - index: 65
+      dist: 5
+    - index: 74
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 55
+      dist: 5
+    - index: 64
+      dist: 5
+    - index: 66
+      dist: 5
+    - index: 75
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 56
+      dist: 5
+    - index: 65
+      dist: 5
+    - index: 67
+      dist: 5
+    - index: 76
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 57
+      dist: 5
+    - index: 66
+      dist: 5
+    - index: 68
+      dist: 5
+    - index: 77
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 58
+      dist: 5
+    - index: 67
+      dist: 5
+    - index: 69
+      dist: 5
+    - index: 78
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 59
+      dist: 5
+    - index: 68
+      dist: 5
+    - index: 79
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 60
+      dist: 5
+    - index: 71
+      dist: 5
+    - index: 80
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 61
+      dist: 5
+    - index: 70
+      dist: 5
+    - index: 72
+      dist: 5
+    - index: 81
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 62
+      dist: 5
+    - index: 71
+      dist: 5
+    - index: 73
+      dist: 5
+    - index: 82
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 63
+      dist: 5
+    - index: 72
+      dist: 5
+    - index: 74
+      dist: 5
+    - index: 83
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 64
+      dist: 5
+    - index: 73
+      dist: 5
+    - index: 75
+      dist: 5
+    - index: 84
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 65
+      dist: 5
+    - index: 74
+      dist: 5
+    - index: 76
+      dist: 5
+    - index: 85
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 66
+      dist: 5
+    - index: 75
+      dist: 5
+    - index: 77
+      dist: 5
+    - index: 86
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 67
+      dist: 5
+    - index: 76
+      dist: 5
+    - index: 78
+      dist: 5
+    - index: 87
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 68
+      dist: 5
+    - index: 77
+      dist: 5
+    - index: 79
+      dist: 5
+    - index: 88
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 69
+      dist: 5
+    - index: 78
+      dist: 5
+    - index: 89
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 70
+      dist: 5
+    - index: 81
+      dist: 5
+    - index: 90
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 71
+      dist: 5
+    - index: 80
+      dist: 5
+    - index: 82
+      dist: 5
+    - index: 91
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 72
+      dist: 5
+    - index: 81
+      dist: 5
+    - index: 83
+      dist: 5
+    - index: 92
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 73
+      dist: 5
+    - index: 82
+      dist: 5
+    - index: 84
+      dist: 5
+    - index: 93
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 74
+      dist: 5
+    - index: 83
+      dist: 5
+    - index: 85
+      dist: 5
+    - index: 94
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 75
+      dist: 5
+    - index: 84
+      dist: 5
+    - index: 86
+      dist: 5
+    - index: 95
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 76
+      dist: 5
+    - index: 85
+      dist: 5
+    - index: 87
+      dist: 5
+    - index: 96
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 77
+      dist: 5
+    - index: 86
+      dist: 5
+    - index: 88
+      dist: 5
+    - index: 97
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 78
+      dist: 5
+    - index: 87
+      dist: 5
+    - index: 89
+      dist: 5
+    - index: 98
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 79
+      dist: 5
+    - index: 88
+      dist: 5
+    - index: 99
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 80
+      dist: 5
+    - index: 91
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 81
+      dist: 5
+    - index: 90
+      dist: 5
+    - index: 92
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 82
+      dist: 5
+    - index: 91
+      dist: 5
+    - index: 93
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 83
+      dist: 5
+    - index: 92
+      dist: 5
+    - index: 94
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 84
+      dist: 5
+    - index: 93
+      dist: 5
+    - index: 95
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 85
+      dist: 5
+    - index: 94
+      dist: 5
+    - index: 96
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 86
+      dist: 5
+    - index: 95
+      dist: 5
+    - index: 97
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 87
+      dist: 5
+    - index: 96
+      dist: 5
+    - index: 98
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 88
+      dist: 5
+    - index: 97
+      dist: 5
+    - index: 99
+      dist: 5
+  - isBlocked: 0
+    position: {x: 0, y: 0}
+    navData:
+      pIndex: 0
+      wasTarget: 0
+      evaluated: 0
+      tDist: 3.4028235e+38
+    connections:
+    - index: 89
+      dist: 5
+    - index: 98
+      dist: 5
+  navigate: 0
+  clearNavData: 0
+  startIndex: 0
+  finalIndex: 99
+  navPath: 
+--- !u!4 &833658573
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 833658571}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
