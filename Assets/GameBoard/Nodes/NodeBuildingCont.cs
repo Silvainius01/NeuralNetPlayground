@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class BuildingValueInt : BuildingValue<int>
+{
+	public BuildingValueInt(BuildingData data, int value) : base(data, value) { }
+}
 
+[System.Serializable]
 public class NodeBuildingCont
 {
 	int maxBuildings = 1;
 	NodeController parentNode;
+
+	[SerializeField] List<BuildingValueInt> buildingsOnNodeList = new List<BuildingValueInt>();
 	Dictionary<int, BuildingValue<int>> buildingsOnNode = new Dictionary<int, BuildingValue<int>>();
 	Dictionary<BUILDING_TYPE, int> buildingTypeCount = new Dictionary<BUILDING_TYPE, int>(new BuildingTypeComparer());
 	
@@ -27,28 +35,31 @@ public class NodeBuildingCont
 	/// <summary> Adds passed building to node X times. Respects build limits. Returns true if building is added. </summary>
 	public bool AddBuilding(BuildingData bData, int count)
 	{
-		if (buildingTypeCount[bData.buildingType] >= GameManager.instance.maxBuildingTypesDict[bData.buildingType])
+		if (!CanSupportBuilding(bData))
 			return false;
 
-		if (buildingsOnNode.ContainsKey(bData.key))
-			AttemptToSetBuildingCount(bData, buildingsOnNode[bData.key].value + count);
-		else
-		{
-			buildingsOnNode.Add(bData.key, new BuildingValue<int>(bData, 0));
-			AttemptToSetBuildingCount(bData, count);
-		}
+		if (!buildingsOnNode.ContainsKey(bData.key))
+			AddBuildingInternal(bData);
+		AttemptToSetBuildingCount(bData, buildingsOnNode[bData.key].value + count);
 		return true;
+	}
+	/// <summary> Sets the count of a building to a given number. Ignores build limits. </summary>
+	public void SetBuildingCount(string buildingName, int count)
+	{
+		SetBuildingCount(GameManager.instance.GetBuildingFromName(buildingName), count);
 	}
 	/// <summary> Sets the count of a building to a given number. Ignores build limits. </summary>
 	public void SetBuildingCount(BuildingData bData, int count)
 	{
-		if (buildingsOnNode.ContainsKey(bData.key))
-			AttemptToSetBuildingCount(bData, count);
-		else
-		{
-			buildingsOnNode.Add(bData.key, new BuildingValue<int>(bData, 0));
-			AttemptToSetBuildingCount(bData, count);
-		}
+		if (!buildingsOnNode.ContainsKey(bData.key))
+			AddBuildingInternal(bData);
+		AttemptToSetBuildingCount(bData, count);
+	}
+
+	public void RemoveAllBuildings()
+	{
+		foreach (var bvi in buildingsOnNodeList)
+			SetBuildingCount(bvi.building, 0);
 	}
 
 	public int GetBuildingCount(BuildingData building)
@@ -71,6 +82,12 @@ public class NodeBuildingCont
 		return buildingTypeCount[type] < GameManager.instance.maxBuildingTypesDict[type];
 	}
 
+	void AddBuildingInternal(BuildingData bData)
+	{
+		BuildingValueInt bv = new BuildingValueInt(bData, 0);
+		buildingsOnNodeList.Add(bv);
+		buildingsOnNode.Add(bData.key, bv);
+	}
 	void AttemptToSetBuildingCount(BuildingData bData, int count)
 	{
 		if (count < 0)

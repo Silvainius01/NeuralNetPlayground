@@ -37,6 +37,7 @@ public class GraphMaker : MonoBehaviour
 		
         public bool isBlocked = false;
         public Vector2 position = Vector2.zero;
+		public Vector2Int boardPos = Vector2Int.zero;
         public NavData navData = null;
         public List<ConnectionData> connections = new List<ConnectionData>();
 
@@ -72,6 +73,8 @@ public class GraphMaker : MonoBehaviour
 	[SerializeField] int finalIndex = 0;
 	[SerializeField] List<int> navPath = new List<int>();
 
+	public Vector2Int dimensions { get { return boardDimensions; } }
+
     private void Awake()
     {
     }
@@ -79,10 +82,11 @@ public class GraphMaker : MonoBehaviour
     // Graph Internal Utility
     #region
 
-    void AddPoint(Vector2 pos)
+    void AddPoint(Vector2 pos, Vector2Int boardPos)
     {
         GraphPoint newPoint = new GraphPoint();
         newPoint.position = pos;
+		newPoint.boardPos = boardPos;
         graphPoints.Add(newPoint);
     }
 
@@ -169,9 +173,9 @@ public class GraphMaker : MonoBehaviour
 		
         for (int x = 0; x < boardDimensions.x; ++x)
         {
-            for (float y = 0; y < boardDimensions.y; ++y)
+            for (int y = 0; y < boardDimensions.y; ++y)
             {
-                AddPoint(startPos + (new Vector2(x, y) * squareSideSize));
+				AddPoint(startPos + (new Vector2(x, y) * squareSideSize), new Vector2Int(x, y));
             }
         }
 

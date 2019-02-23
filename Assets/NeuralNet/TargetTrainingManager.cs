@@ -80,7 +80,7 @@ public class TargetTrainingManager : MonoBehaviour
 		foreach (var network in networks)
 		{
 			winRates.Add(0.0f);
-			network.BuildDefaultNetwork();
+			//network.BuildDefaultNetwork();
 		}
 	}
 
@@ -201,7 +201,7 @@ public class TargetTrainingManager : MonoBehaviour
 		{
 			if (i != bestNetwork)
 			{
-				networks[i].CopyFrom(networks[bestNetwork]);
+				networks[i].CopyConnectionsFrom(networks[bestNetwork]);
 				networks[i].MutateAsexual(mutationChance);
 			}
 		}
@@ -226,7 +226,7 @@ public class TargetTrainingManager : MonoBehaviour
 			MutateNetworks();
 			foreach (var network in networks)
 			{
-				network.CacheGizmoDrawData();
+				//network.CacheGizmoDrawData();
 			}
 			mutateNetworks = false;
 		}

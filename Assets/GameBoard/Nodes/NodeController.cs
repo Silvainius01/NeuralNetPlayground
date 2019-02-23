@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public partial class NodeController : MonoBehaviour
 {
 	public int index;
 	[SerializeField] SpriteRenderer sprite;
 	public Dictionary<int, NodeController> connections;
 
-	Player owner;
+	public Player owner { get; private set; }
 	GameManager gameManager;
 	GraphMaker.GraphPoint graphPoint;
+
+	public int nearestOwnedDist { get; private set; }
+	public Vector2Int boardPosition { get { return graphPoint.boardPos; } }
 
 	public NodeResourceCont resourceCont;
 	public NodeBuildingCont buildingCont;
@@ -21,6 +25,7 @@ public partial class NodeController : MonoBehaviour
 		set { sprite.color = value; }
 	}
 
+	public Dictionary<int, System.Tuple<int, uint>> playerDistanceDict = new Dictionary<int, System.Tuple<int, uint>>();
 	public void Init(int index, GraphMaker.GraphPoint point)
 	{
 		owner = null;
@@ -32,12 +37,26 @@ public partial class NodeController : MonoBehaviour
 		gameManager = GameManager.instance;
 		resourceCont = new NodeResourceCont(this);
 		buildingCont = new NodeBuildingCont(this);
-
 		connections = new Dictionary<int, NodeController>(point.connections.Count);
 		foreach (var c in point.connections)
 		{
 			ConnectToNode(gameManager.GetNodeFromIndex(c.index));
 		}
+
+		Reset();
+	}
+
+	public void Reset()
+	{
+		buildingCont.RemoveAllBuildings();
+		resourceCont.SetAllResourceRates(0.0f);
+		resourceCont.RemoveFromOwnerResourceRate();
+		nearestOwnedDist = gameManager.graphMaker.dimensions.x + gameManager.graphMaker.dimensions.y;
+		
+		foreach (var p in GameManager.instance.players)
+			playerDistanceDict[p.id] = new System.Tuple<int, uint>(int.MaxValue, 0);
+
+		SetOwner(null);
 	}
 
 	void ConnectToNode(NodeController node)
@@ -51,13 +70,17 @@ public partial class NodeController : MonoBehaviour
 
 	public void SetOwner(Player player)
 	{
-		if(owner!=null)
+		if (owner != null)
+		{
 			owner.RemoveNode(this);
+			resourceCont.RemoveFromOwnerResourceRate();
+		}
 		if (player != null)
 		{
 			owner = player;
 			color = player.color;
 			player.AddNode(this);
+			resourceCont.AddToOwnerResourceRate();
 		}
 		else
 		{
@@ -84,5 +107,10 @@ public partial class NodeController : MonoBehaviour
 	public bool IsConnectedTo(NodeController node)
 	{
 		return connections.ContainsKey(node.index);
+	}
+
+	public void SetNearestOwned(int v)
+	{
+		nearestOwnedDist = v;
 	}
 }
