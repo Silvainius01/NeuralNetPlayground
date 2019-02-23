@@ -25,9 +25,9 @@ public class PlayerNetworkManager : MonoBehaviour
 	public void Init(Player p)
 	{
 		player = p;
-		developmentInputs = new float[nnDevelopment.numInputs];
-		expansionInputs = new float[nnExpansion.numInputs];
-		threatInputs = new float[nnThreatLevel.numInputs];
+		developmentInputs = new float[nnDevelopment.inputCount];
+		expansionInputs = new float[nnExpansion.inputCount];
+		threatInputs = new float[nnThreatLevel.inputCount];
 
 
 		nnDevelopment.RefreshConnections();

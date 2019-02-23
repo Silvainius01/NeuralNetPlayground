@@ -514,6 +514,20 @@ public static class Mathc
 
 			return keyEnumerator.Current;
 		}
+
+		/// <summary>
+		/// Get a value that is equivalent to the mid value, and shifted a bit to a random side.
+		/// </summary>
+		public static float GetMarsagliaBetween(float min, float max)
+		{
+			if(min > max)
+			{
+				var t = max;
+				max = min;
+				min = t;
+			}
+			return min + ((max - min) * 0.5f * Marsaglia(true));
+		}
 	}
 
 	/// <summary> I.E. 90 degrees </summary>

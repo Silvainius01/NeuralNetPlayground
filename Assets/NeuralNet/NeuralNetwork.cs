@@ -11,11 +11,17 @@ public class Node
 	int receivedInputs = 0;
 	float value = 0.0f;
 	public float currentValue { get { return value / receivedInputs; } }
+	[SerializeField] float bias = 0.0f;
 	[SerializeField] List<Axon> axons = new List<Axon>();
 
 	public Node(int id)
 	{
 		this.id = id;
+	}
+	public Node(int id, float bias)
+	{
+		this.id = id;
+		this.bias = bias;
 	}
 	public Node(int id, params Node[] connectedNodes)
 	{
@@ -102,19 +108,19 @@ public class Node
 		}
 	}
 
-	public void MutateConnections(float chance)
+	public void MutateAsexual(float chance)
 	{
 		foreach (var axon in axons)
-			axon.Mutate(chance);
+			axon.MutateAsexual(chance);
+		if(Random.value < chance)
+			bias += bias * Mathc.Random.Marsaglia(true);
 	}
-	public void InheritConnections(Node parent)
+	public void MutateSexual(Node parent)
 	{
-		int mIndex = axons.Count > parent.axons.Count ? parent.axons.Count : axons.Count;
+		//int mIndex = axons.Count > parent.axons.Count ? parent.axons.Count : axons.Count;
 		for(int i = 0; i < axons.Count; ++i)
-		{
-			if (Random.value <= 0.5f)
-				axons[i].weight = parent.axons[i].weight;
-		}
+			axons[i].MutateSexual(parent.axons[i]);
+		bias = Mathc.Random.GetMarsagliaBetween(bias, parent.bias);
 	}
 #endif
 }
@@ -136,13 +142,18 @@ public class Axon
 	}
 
 #if UNITY_EDITOR
-	public void Mutate(float chance)
+	public void MutateAsexual(float chance)
 	{
 		if (Random.value < chance)
 		{
 			weight += Mathc.Random.Marsaglia(true);
 			weight = Mathf.Clamp(weight, -1, 1);
 		}
+	}
+	public void MutateSexual(Axon axon)
+	{
+		// Modify the value of the weight by getting the mean of the two axons, then allowing that value to shift a bit.
+		weight = Mathc.Random.GetMarsagliaBetween(weight, axon.weight);
 	}
 #endif
 }
@@ -191,16 +202,16 @@ public partial class NeuralNetwork : MonoBehaviour
 {
 	bool isBuilt;
 	bool isConnected;
-
-
+	
 	[SerializeField] protected List<NodeListWrapper> nodeLayers = new List<NodeListWrapper>();
 
 	NodeListWrapper inputLayer { get { return nodeLayers[0]; } }
 	NodeListWrapper outputLayer { get { return nodeLayers[nodeLayers.Count - 1]; } }
 
-	public int numLayers { get { return nodeLayers.Count; } }
-	public int numInputs { get { return nodeLayers[0].Count; } }
-	public int numOutputs { get { return nodeLayers[nodeLayers.Count - 1].Count; } }
+	public int layerCount { get { return nodeLayers.Count; } }
+	public int inputCount { get { return nodeLayers[0].Count; } }
+	public int ouputCount { get { return nodeLayers[nodeLayers.Count - 1].Count; } }
+	public int nodeCount { get; private set; }
 
 	/// <summary> Builds a new network where all nodes in one layer connect to all other nodes in the next with random weights. </summary>
 	/// <param name="inputHeight">How many input nodes?</param> 
@@ -218,6 +229,7 @@ public partial class NeuralNetwork : MonoBehaviour
 				nodeLayers[i].Add(new Node(currId++));
 		}
 
+		nodeCount = currId;
 		isBuilt = true;
 		ConnectNetworkFresh();
 	}
@@ -244,16 +256,16 @@ public partial class NeuralNetwork : MonoBehaviour
 
 	public float[] Evaluate(params float[] inputs)
 	{
-		if (inputs.Length != numInputs)
+		if (inputs.Length != inputCount)
 		{
 			Debug.LogError("Num inputs does not match node count!!");
 			return null;
 		}
 
-		float[] retval = new float[numOutputs];
+		float[] retval = new float[ouputCount];
 
 		// Give the network the inputs, then send them to next layer.
-		for (int i = 0; i < numInputs; ++i)
+		for (int i = 0; i < inputCount; ++i)
 		{
 			inputLayer[i].ReceiveInput(inputs[i]);
 			inputLayer[i].SendOutput();
@@ -272,8 +284,7 @@ public partial class NeuralNetwork : MonoBehaviour
 
 		return retval;
 	}
-
-
+	
 	public bool CopyConnectionsFrom(NeuralNetwork network)
 	{
 		if(!IsCompatibleWith(network))
@@ -300,11 +311,11 @@ public partial class NeuralNetwork : MonoBehaviour
 #endif
 	}
 
-	public void MutateAsexual(float mutationProb)
+	public void MutateAsexual(float mutationProb, float newNodeProb, float newLayerProb)
 	{
 		for (int i = 0; i < nodeLayers.Count; ++i)
 			foreach (var n0 in nodeLayers[i])
-				n0.MutateConnections(mutationProb);
+				n0.MutateAsexual(mutationProb);
 	}
 	public void MutateSexual(NeuralNetwork partner, float mutationProb)
 	{
@@ -322,6 +333,56 @@ public partial class NeuralNetwork : MonoBehaviour
 		for (int i = 0; i < nodeLayers.Count; ++i)
 			if (nodeLayers[i].Count != partner.nodeLayers[i].Count)
 				return false;
+		return true;
+	}
+
+	public enum LAYER_ADD_MODE { INSERT, TANGENT }
+	public bool AddNodeToLayer(int layer, bool randomWeights, float weightVal = 0.0f, float biasVal = 0.0f)
+	{
+		if (!Mathc.ValueIsBetween(layer, -1, layerCount, true))
+			return false;
+
+		Node newNode = new Node(nodeCount++);
+		nodeLayers[layer].nodeList.Add(newNode);
+
+		if (layer > 0)
+			foreach (var node in nodeLayers[layer - 1])
+				node.ConnectNode(newNode, randomWeights ? Random.value * 2 - 1 : 0.0f);
+		if(layer < layerCount-1)
+			foreach(var node in nodeLayers[layer + 1])
+				newNode.ConnectNode(node, randomWeights ? Random.value * 2 - 1 : 0.0f);
+		return true;
+	}
+	public bool AddLayerToNetwork(int index, int numNodes, LAYER_ADD_MODE addMode, bool randomWeights, float weightVal = 0.0f, float biasVal = 0.0f)
+	{
+		if (!Mathc.ValueIsBetween(index, 0, layerCount - 1, true))
+			return false;
+
+		NodeListWrapper newLayer = new List<Node>(numNodes);
+
+		// Create and insert newLayer
+		for(int i = 0; i < numNodes; ++i)
+			newLayer.Add(new Node(nodeCount++, randomWeights ? Random.value * 2 - 1 : biasVal));
+		nodeLayers.Insert(index, newLayer);
+
+		switch (addMode)
+		{
+			case LAYER_ADD_MODE.INSERT:
+				foreach (var n1 in nodeLayers[index - 1])
+				{
+					n1.RemoveAllConnections();
+					foreach (var n0 in newLayer)
+						n1.ConnectNode(n0, randomWeights ? Random.value * 2 - 1 : weightVal);
+				}
+				foreach (var n0 in newLayer)
+					foreach (var n1 in nodeLayers[index + 1])
+						n0.ConnectNode(n1, randomWeights ? Random.value * 2 - 1 : weightVal);
+				break;
+			case LAYER_ADD_MODE.TANGENT:
+
+				break;
+		}
+	
 		return true;
 	}
 }
@@ -394,14 +455,14 @@ partial class NeuralNetwork
 
 		public void CacheGizmoDrawData()
 		{
-			if (owner.numLayers <= 0)
+			if (owner.layerCount <= 0)
 				return;
 
 			float xPos = 0.0f;
 			float layerHeight = 0.0f;
 			float startX = 0.0f;
 			layerStartList.Clear();
-			layerStartList.Capacity = owner.numLayers;
+			layerStartList.Capacity = owner.layerCount;
 
 			float GetLayerHeight(int height)
 			{
@@ -415,8 +476,8 @@ partial class NeuralNetwork
 			// Input layer start height
 			layerHeight = GetLayerHeight(owner.nodeLayers[0].Count);
 			// Network starting X
-			startX = nodeSize * owner.numLayers * 2;
-			startX += layerSpacing * (owner.numLayers - 1);
+			startX = nodeSize * owner.layerCount * 2;
+			startX += layerSpacing * (owner.layerCount - 1);
 			startX = -((startX / 2.0f) - nodeSize);
 
 			layerStartList.Add(new Vector3(startX, layerHeight));
