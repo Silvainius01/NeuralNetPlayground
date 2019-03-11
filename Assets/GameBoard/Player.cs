@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
 
 			if (GameManager.instance.CanPlayerClaimEmptyNode(this))
 				desires.Add(nnManager.EvaluateExpansion(out expansionNode));
-			else desires.Add(0.0f);
+			else desires.Add(-1.0f);
 
 			int actionDesire = -1;
 			float highest = 0.0f;

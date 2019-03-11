@@ -5,25 +5,25 @@ using UnityEngine.UI;
 
 /// <summary> Basic node type. Simply sends and receives values. </summary>
 [System.Serializable]
-public class Node
+public class Neuron
 {
 	int id;
 	int receivedInputs = 0;
 	float value = 0.0f;
-	public float currentValue { get { return value / receivedInputs; } }
+	public float currentValue { get { return ProcessValue(value + bias); } }
 	[SerializeField] float bias = 0.0f;
 	[SerializeField] List<Axon> axons = new List<Axon>();
 
-	public Node(int id)
+	public Neuron(int id)
 	{
 		this.id = id;
 	}
-	public Node(int id, float bias)
+	public Neuron(int id, float bias)
 	{
 		this.id = id;
 		this.bias = bias;
 	}
-	public Node(int id, params Node[] connectedNodes)
+	public Neuron(int id, params Neuron[] connectedNodes)
 	{
 		this.id = id;
 		foreach (var node in connectedNodes)
@@ -50,24 +50,26 @@ public class Node
 		value += ProcessValue(input);
 	}
 
-	public void RemoveConnection(Node n)
+	public bool RemoveConnection(Neuron n)
 	{
 		for (int i = 0; i < axons.Count; ++i)
 			if (axons[i].receivingNode == n)
 			{
+				axons[i].receivingNode = null;
 				axons.RemoveAt(i);
-				break;
+				return true;
 			}
+		return false;
 	}
 	public void RemoveAllConnections()
 	{
 		axons.Clear();
 	}
-	public void ConnectNode(Node n, float weight)
+	public void ConnectNode(Neuron n, float weight)
 	{
 		axons.Add(new Axon(weight, n));
 	}
-	public void RefreshConnection(Node n)
+	public bool RefreshConnection(Neuron n)
 	{
 		float weight = 0.0f;
 		foreach (var axon in axons)
@@ -75,19 +77,40 @@ public class Node
 			{
 				weight = axon.weight;
 				RemoveConnection(axon.receivingNode);
-				break;
+				ConnectNode(n, weight);
+				return true;
 			}
-		ConnectNode(n, weight);
+		return false;
+	}
+	/// <summary>
+	/// This function is weird. it takes in two nodes, and "gives" its connection to 'newConnection', and then disconnects itself from 'connectedNode'.
+	/// </summary>
+	/// <param name="connectedNode">The node that is currently connected</param>
+	/// <param name="newConnection">The node you want to be connected instead of this one</param>
+	/// <param name="replaceWeight">If you want to overwrite the current connection weight, set this to true.</param>
+	/// <param name="weightVal">If overwriting the current weight, this value is used as the new weight.</param>
+	/// <returns></returns>
+	public bool ReplaceConnection(Neuron connectedNode, Neuron newConnection, bool replaceWeight, float weightVal = 0.0f)
+	{
+		foreach(var axon in axons)
+			if(axon.receivingNode.id == connectedNode.id)
+			{
+				float w = axon.weight;
+				RemoveConnection(axon.receivingNode);
+				newConnection.ConnectNode(connectedNode, replaceWeight ? weightVal : w);
+				return true;
+			}
+		return false;
 	}
 
-	protected virtual float ProcessValue(float input)
+	protected virtual float ProcessValue(float value)
 	{
-		return input;
+		return value / receivedInputs;
 	}
 
 	/// <summary> Copies connection WEIGHTS top down. </summary>
 	/// <param name="n"></param>
-	public void CopyWeightsFrom(Node n)
+	public void CopyWeightsFrom(Neuron n)
 	{
 		int mIndex = n.axons.Count > axons.Count ? axons.Count : n.axons.Count;
 		for (int i = 0; i < mIndex; ++i)
@@ -115,7 +138,7 @@ public class Node
 		if(Random.value < chance)
 			bias += bias * Mathc.Random.Marsaglia(true);
 	}
-	public void MutateSexual(Node parent)
+	public void MutateSexual(Neuron parent)
 	{
 		//int mIndex = axons.Count > parent.axons.Count ? parent.axons.Count : axons.Count;
 		for(int i = 0; i < axons.Count; ++i)
@@ -129,9 +152,9 @@ public class Node
 public class Axon
 {
 	public float weight;
-	public Node receivingNode;
+	public Neuron receivingNode;
 
-	public Axon(float weight, Node receivingNode)
+	public Axon(float weight, Neuron receivingNode)
 	{
 		this.weight = weight;
 		this.receivingNode = receivingNode;
@@ -159,27 +182,31 @@ public class Axon
 }
 
 [System.Serializable]
-public class NodeListWrapper : IEnumerable<Node>
+public class NeuronListWrapper : IEnumerable<Neuron>
 {
-	public List<Node> nodeList = new List<Node>();
+	public List<Neuron> nodeList = new List<Neuron>();
 
 	public int Count { get { return nodeList.Count; } }
-	public Node this[int i]
+	public Neuron this[int i]
 	{
 		get { return nodeList[i]; }
 		set { nodeList[i] = value; }
 	}
 
-	public NodeListWrapper(List<Node> list)
+	public NeuronListWrapper(List<Neuron> list)
 	{
 		nodeList = list;
 	}
-	public void Add(Node n)
+	public void Add(Neuron n)
 	{
 		nodeList.Add(n);
 	}
+	public void RemoveAt(int index)
+	{
+		nodeList.RemoveAt(index);
+	}
 
-	public IEnumerator<Node> GetEnumerator()
+	public IEnumerator<Neuron> GetEnumerator()
 	{
 		return nodeList.GetEnumerator();
 	}
@@ -188,13 +215,13 @@ public class NodeListWrapper : IEnumerable<Node>
 		return nodeList.GetEnumerator();
 	}
 	
-	public static implicit operator List<Node>(NodeListWrapper nlw)
+	public static implicit operator List<Neuron>(NeuronListWrapper nlw)
 	{
 		return nlw.nodeList;
 	}
-	public static implicit operator NodeListWrapper(List<Node> list)
+	public static implicit operator NeuronListWrapper(List<Neuron> list)
 	{
-		return new NodeListWrapper(list);
+		return new NeuronListWrapper(list);
 	}
 }
 
@@ -203,10 +230,10 @@ public partial class NeuralNetwork : MonoBehaviour
 	bool isBuilt;
 	bool isConnected;
 	
-	[SerializeField] protected List<NodeListWrapper> nodeLayers = new List<NodeListWrapper>();
+	[SerializeField] protected List<NeuronListWrapper> nodeLayers = new List<NeuronListWrapper>();
 
-	NodeListWrapper inputLayer { get { return nodeLayers[0]; } }
-	NodeListWrapper outputLayer { get { return nodeLayers[nodeLayers.Count - 1]; } }
+	NeuronListWrapper inputLayer { get { return nodeLayers[0]; } }
+	NeuronListWrapper outputLayer { get { return nodeLayers[nodeLayers.Count - 1]; } }
 
 	public int layerCount { get { return nodeLayers.Count; } }
 	public int inputCount { get { return nodeLayers[0].Count; } }
@@ -224,9 +251,9 @@ public partial class NeuralNetwork : MonoBehaviour
 
 		for(int i = 0; i < layerHeights.Length; ++i)
 		{
-			nodeLayers.Add(new List<Node>());
+			nodeLayers.Add(new List<Neuron>());
 			for (int j = 0; j < layerHeights[i]; ++j)
-				nodeLayers[i].Add(new Node(currId++));
+				nodeLayers[i].Add(new Neuron(currId++));
 		}
 
 		nodeCount = currId;
@@ -311,11 +338,33 @@ public partial class NeuralNetwork : MonoBehaviour
 #endif
 	}
 
-	public void MutateAsexual(float mutationProb, float newNodeProb, float newLayerProb)
+	public string MutateAsexual(float mutationProb, float newNodeProb, float newLayerProb, bool randomWeights)
 	{
+		string retval = "";
 		for (int i = 0; i < nodeLayers.Count; ++i)
 			foreach (var n0 in nodeLayers[i])
 				n0.MutateAsexual(mutationProb);
+		if (layerCount > 2 && Random.value < newNodeProb)
+		{
+			int i = Random.Range(1, layerCount - 1);
+			AddNodeToLayer(i, randomWeights);
+			retval += $"(N{i})";
+		}
+		if(Random.value < newLayerProb)
+		{
+			int index = Random.Range(1, layerCount);
+			int numNodes = nodeLayers[index].Count;
+			if(randomWeights)
+			{
+				foreach (var l in nodeLayers)
+					if (l.Count > numNodes)
+						numNodes = l.Count;
+			}
+			numNodes = randomWeights ? Random.Range(1, numNodes + 1) : numNodes;
+			AddLayer(index, numNodes, false, randomWeights);
+			retval += $"(L{index} {numNodes})";
+		}
+		return retval;
 	}
 	public void MutateSexual(NeuralNetwork partner, float mutationProb)
 	{
@@ -323,8 +372,7 @@ public partial class NeuralNetwork : MonoBehaviour
 			return;
 		for (int i = 0; i < nodeLayers.Count; ++i)
 			for (int j = 0; j < nodeLayers.Count; ++i)
-				nodeLayers[i][j].InheritConnections(partner.nodeLayers[i][j]);
-		MutateAsexual(mutationProb);
+				nodeLayers[i][j].MutateSexual(partner.nodeLayers[i][j]);
 	}
 	public bool IsCompatibleWith(NeuralNetwork partner)
 	{
@@ -335,59 +383,143 @@ public partial class NeuralNetwork : MonoBehaviour
 				return false;
 		return true;
 	}
+	
+	public bool RemoveNodeFromLayer(int layerIndex)
+	{
+		if (!Mathc.ValueIsBetween(layerIndex, -1, layerCount, true))
+			return false;
 
-	public enum LAYER_ADD_MODE { INSERT, TANGENT }
+		var layer = nodeLayers[layerIndex];
+		var neuron = layer[layer.Count - 1];
+
+		if (layerIndex > 0)
+			foreach (var n in nodeLayers[layerIndex - 1])
+				n.RemoveConnection(neuron);
+		neuron.RemoveAllConnections();
+
+		layer.RemoveAt(layer.Count - 1);
+		nodeCount--;
+
+		return true;
+	}
 	public bool AddNodeToLayer(int layer, bool randomWeights, float weightVal = 0.0f, float biasVal = 0.0f)
 	{
 		if (!Mathc.ValueIsBetween(layer, -1, layerCount, true))
 			return false;
 
-		Node newNode = new Node(nodeCount++);
-		nodeLayers[layer].nodeList.Add(newNode);
+		Neuron newNode = new Neuron(nodeCount++, randomWeights ? Random.value * 2 - 1 : biasVal);
+		nodeLayers[layer].Add(newNode);
 
 		if (layer > 0)
 			foreach (var node in nodeLayers[layer - 1])
-				node.ConnectNode(newNode, randomWeights ? Random.value * 2 - 1 : 0.0f);
+				node.ConnectNode(newNode, randomWeights ? Random.value * 2 - 1 : weightVal);
 		if(layer < layerCount-1)
 			foreach(var node in nodeLayers[layer + 1])
-				newNode.ConnectNode(node, randomWeights ? Random.value * 2 - 1 : 0.0f);
+				newNode.ConnectNode(node, randomWeights ? Random.value * 2 - 1 : weightVal);
 		return true;
 	}
-	public bool AddLayerToNetwork(int index, int numNodes, LAYER_ADD_MODE addMode, bool randomWeights, float weightVal = 0.0f, float biasVal = 0.0f)
+	/// <summary>  </summary>
+	/// <param name="index"></param>
+	/// <param name="numNodes"></param>
+	/// <param name="replaceAxonWeights">
+	/// If you do not want to change the inputs going into this layer, set to false.
+	/// NOTE: If the layer does not contain the same number of nodes as the one before it, THIS OPTION WILL DO NOTHING!!
+	/// </param>
+	/// <param name="randomWeights"></param>
+	/// <param name="weightVal"></param>
+	/// <param name="biasVal"></param>
+	/// <returns></returns>
+	public bool AddLayer(int index, int numNodes, bool replaceAxonWeights, bool randomWeights, float weightVal = 1.0f, float biasVal = 0.0f)
 	{
-		if (!Mathc.ValueIsBetween(index, 0, layerCount - 1, true))
+		if (!Mathc.ValueIsBetween(index, 0, layerCount, true))
 			return false;
 
-		NodeListWrapper newLayer = new List<Node>(numNodes);
+		// If the added layer and previous layer do not have the same number of nodes, copying connections can't be done.
+		//Debug.Log($"{numNodes} != {nodeLayers[index-1].Count}");
+		if (numNodes != nodeLayers[index-1].Count)
+			replaceAxonWeights = true;
+
+		NeuronListWrapper newLayer = new List<Neuron>(numNodes);
 
 		// Create and insert newLayer
-		for(int i = 0; i < numNodes; ++i)
-			newLayer.Add(new Node(nodeCount++, randomWeights ? Random.value * 2 - 1 : biasVal));
+		for (int i = 0; i < numNodes; ++i)
+			newLayer.Add(new Neuron(nodeCount++, randomWeights ? Random.value * 2 - 1 : biasVal));
 		nodeLayers.Insert(index, newLayer);
 
-		switch (addMode)
-		{
-			case LAYER_ADD_MODE.INSERT:
-				foreach (var n1 in nodeLayers[index - 1])
-				{
-					n1.RemoveAllConnections();
-					foreach (var n0 in newLayer)
-						n1.ConnectNode(n0, randomWeights ? Random.value * 2 - 1 : weightVal);
-				}
-				foreach (var n0 in newLayer)
-					foreach (var n1 in nodeLayers[index + 1])
-						n0.ConnectNode(n1, randomWeights ? Random.value * 2 - 1 : weightVal);
-				break;
-			case LAYER_ADD_MODE.TANGENT:
+		var prevLayer = nodeLayers[index - 1];
+		var nextLayer = nodeLayers[index + 1];
 
-				break;
+		// If possible, copy prevLayer->nextLayer connections to corresponding newLayer->nextLayer connections
+		if(!replaceAxonWeights)
+		{
+			//Debug.Log("Copying connections");
+			for(int i = 0; i < prevLayer.Count; ++i)
+			{
+				var n0 = prevLayer[i];
+				var n1 = newLayer[i];
+				foreach (var n2 in nextLayer)
+					n0.ReplaceConnection(n2, n1, false);
+			}
 		}
+		// If not copying, remove prevLayer's connections, and then connect newLayer to nextLayer.
+		else
+		{
+			//Debug.Log("Replacing connections");
+			foreach (var n0 in prevLayer)
+				n0.RemoveAllConnections();
+			foreach(var n0 in newLayer)
+				foreach(var n1 in nextLayer)
+					n0.ConnectNode(n1, randomWeights ? Random.value * 2 - 1 : weightVal);
+		}
+
+
+		// Connect prevLayer to newLayer
+		foreach (var n0 in prevLayer)
+			foreach (var n1 in newLayer)
+				n0.ConnectNode(n1, randomWeights ? Random.value * 2 - 1 : weightVal);
+
+		return true;
+	}
+	public bool RemoveLayer(int index, bool replaceConnections)
+	{
+		if (!Mathc.ValueIsBetween(index, 0, layerCount-1, true))
+			return false;
+
+		var currLayer = nodeLayers[index];
+		var prevLayer = nodeLayers[index - 1];
+		var nextLayer = nodeLayers[index + 1];
+
+		if (prevLayer.Count != currLayer.Count)
+			replaceConnections = true;
+
+		if(!replaceConnections)
+		{
+			for(int i = 0; i < currLayer.Count; ++i)
+			{
+				var n0 = currLayer[i];
+				var n1 = prevLayer[i];
+				n1.RemoveAllConnections();
+				foreach (var n2 in nextLayer)
+					n0.ReplaceConnection(n2, n1, false);
+			}
+		}
+		else
+		{
+			foreach(var n0 in prevLayer)
+			{
+				n0.RemoveAllConnections();
+				foreach (var n1 in nextLayer)
+					n0.ConnectNode(n1, Random.value * 2 - 1);
+			}
+		}
+
+		nodeLayers.RemoveAt(index);
 	
 		return true;
 	}
 }
 
-partial class NeuralNetwork
+public partial class NeuralNetwork
 {
 #if UNITY_EDITOR
 	[System.Serializable]
@@ -548,6 +680,7 @@ partial class NeuralNetwork
 			foreach (var node in layer)
 				Gizmos.DrawSphere(node.pos, Editor.nodeSize);
 	}
+
 	void DrawConnections()
 	{
 		foreach (var layer in nodeLayers)

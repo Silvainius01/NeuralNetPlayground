@@ -24,12 +24,14 @@ public partial class NodeController : MonoBehaviour
 		get { return sprite.color; }
 		set { sprite.color = value; }
 	}
+	Color defaultColor;
 
 	public Dictionary<int, System.Tuple<int, uint>> playerDistanceDict = new Dictionary<int, System.Tuple<int, uint>>();
-	public void Init(int index, GraphMaker.GraphPoint point)
+	public void Init(int index, GraphMaker.GraphPoint point, Color startColor)
 	{
 		owner = null;
-		color = Color.grey;
+		color = startColor;
+		defaultColor = startColor;
 		sprite.color = color;
 		graphPoint = point;
 		transform.position = point.position;
@@ -85,7 +87,7 @@ public partial class NodeController : MonoBehaviour
 		else
 		{
 			owner = null;
-			color = Color.grey;
+			color = defaultColor;
 		}
 	}
 

@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
 	Dictionary<BUILDING_TYPE, List<BuildingData>> m_BuildingsByType = new Dictionary<BUILDING_TYPE, List<BuildingData>>(new BuildingTypeComparer());
 
 	[Header("Node Settings")]
+	[SerializeField] Color nodeStartColor;
 	[SerializeField] List<ResourceValue> expansionCost;
 
 	[Header("Player Settings")]
@@ -81,7 +82,7 @@ public class GameManager : MonoBehaviour
 			var node = nodes[nodes.Count - 1];
 			node.transform.position = point.position;
 			node.transform.SetParent(transform);
-			node.Init(i, point);
+			node.Init(i, point, nodeStartColor);
 		}
 
 		// Init players
@@ -93,7 +94,7 @@ public class GameManager : MonoBehaviour
 			players.Add(new GameObject($"Player {i.ToString()}").AddComponent<Player>());
 			playerNetworks.Add(PlayerNetworkManager.Copy($"Player {i.ToString()} Networks", bestNetwork));
 			players[i].Init(i, playerColors[i], playerNetworks[i]);
-			if (i > 0) playerNetworks[i].MutateNetworksAsexual(0.15f);
+			if (i > 0) playerNetworks[i].MutateNetworksAsexual(0.2f, 0.02f, 0.001f, false);
 		}
 
 		StartGame();
@@ -124,8 +125,7 @@ public class GameManager : MonoBehaviour
 					if (p.id != playerWon)
 					{
 						playerNetworks[p.id].CopyNetworkConnectionsFrom(winner);
-						playerNetworks[p.id].MutateNetworksAsexual(0.15f);
-						msg += $"{p.id} ";
+						msg += $"{p.id}{playerNetworks[p.id].MutateNetworksAsexual(0.125f, 0.02f, 0.005f, false)} ";
 					}
 				Debug.Log(msg);
 				SaveCurrentBest(winner);
@@ -162,13 +162,6 @@ public class GameManager : MonoBehaviour
 			foreach (var c in nodes[index].connections)
 				illegalIndexs.Add(c.Value.index);
 		}
-	}
-
-	void BreedNetworks(PlayerNetworkManager winner, PlayerNetworkManager loser)
-	{
-			loser.CopyNetworkConnectionsFrom(winner);
-			loser.MutateNetworksAsexual(0.15f);
-			SaveCurrentBest(winner);
 	}
 
 	void InitializeResources()

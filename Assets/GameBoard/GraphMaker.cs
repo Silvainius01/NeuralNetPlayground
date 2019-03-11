@@ -92,6 +92,7 @@ public class GraphMaker : MonoBehaviour
 
     void ConnectPoints(int indexA, int indexB)
     {
+		//Debug.Log($"C: {graphPoints.Count}  A: {indexA}  B: {indexB}");
         float dist = Vector2.Distance(graphPoints[indexA].position, graphPoints[indexB].position);
 
         foreach (var link in graphPoints[indexA].connections)

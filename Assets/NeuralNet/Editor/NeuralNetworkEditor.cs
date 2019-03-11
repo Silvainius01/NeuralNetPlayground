@@ -108,6 +108,7 @@ public class NeuralNetworkEditor : Editor
 		EditorPrefsUtil.SetGradient("nn_NodeSize", NeuralNetwork.Editor.axonGradient); 
 	}
 
+	List<Vector2Int> modifiedLayers = new List<Vector2Int>();
 	public override void OnInspectorGUI()
 	{
 		#region Gizmo Options
@@ -144,36 +145,38 @@ public class NeuralNetworkEditor : Editor
 
 		#region I/O Nodes
 		int prevVal = 0;
-		bool layersChanged = false;
-
+		bool nodeAdded = false;
 
 		var editorProp = serializedObject.FindProperty("editorUtil");
 		var layersProp = editorProp.FindPropertyRelative("nodeHeights");
-		
-		layersChanged |= NodeLayerMod(layersProp.GetArrayElementAtIndex(0), "Num Input Nodes");
-		layersChanged |= NodeLayerMod(layersProp.GetArrayElementAtIndex(layersProp.arraySize-1), "Num Output Nodes");
+
+		modifiedLayers.Clear();
+		nodeAdded |= NodeLayerMod(layersProp.GetArrayElementAtIndex(0), 0, "Num Input Nodes");
+		nodeAdded |= NodeLayerMod(layersProp.GetArrayElementAtIndex(layersProp.arraySize-1), layersProp.arraySize - 1, "Num Output Nodes");
 		#endregion
 
 		GUILayout.Space(5);
 
 		#region Hidden Layers
+		int layerRem = -1;
+		bool layerAdd = false;
+
 		EditorGUI.indentLevel = 1;
 		if(GUILayout.Button("Add Hidden Layer"))
 		{
-			layersChanged = true;
-			layersProp.InsertArrayElementAtIndex(layersProp.arraySize-1);
-			var p = layersProp.GetArrayElementAtIndex(layersProp.arraySize-1);
-			if (p.intValue < 1)
-				p.intValue = 1;
+			layerAdd = true;
+			int v = layersProp.GetArrayElementAtIndex(layersProp.arraySize - 2).intValue;
+			layersProp.InsertArrayElementAtIndex(layersProp.arraySize - 1);
+			layersProp.GetArrayElementAtIndex(layersProp.arraySize - 2).intValue = v;
 		}
 
 		for(int i = 1; i < layersProp.arraySize-1; ++i)
 		{
 			var indexProp = layersProp.GetArrayElementAtIndex(i);
-			layersChanged |= NodeLayerMod(indexProp, $"Hidden Layer {i.ToString()} Nodes", out bool remove);
+			nodeAdded |= NodeLayerMod(indexProp, i, $"Hidden Layer {i.ToString()} Nodes", out bool remove);
 			if (remove)
 			{
-				layersChanged = true;
+				layerRem = i;
 				layersProp.DeleteArrayElementAtIndex(i--);
 			}
 		}
@@ -184,9 +187,42 @@ public class NeuralNetworkEditor : Editor
 		GUILayout.Space(15);
 
 		serializedObject.ApplyModifiedProperties();
-		if(GUILayout.Button("Rebuild Network") || layersChanged)
+
+		if(nodeAdded)
+		{
+			Debug.Log("Refreshing gizmo data");
+
+			foreach(var v2i in modifiedLayers)
+			{
+				if (v2i.y < 0)
+					nn.RemoveNodeFromLayer(v2i.x);
+				else nn.AddNodeToLayer(v2i.x, false);
+			}
+
+			CacheGizmoDrawData(nn);
+			EditorUtility.SetDirty(nn);
+		}
+
+		if(layerAdd)
+		{
+			var p = layersProp.GetArrayElementAtIndex(layersProp.arraySize - 2);
+			nn.AddLayer(layersProp.arraySize - 2, p.intValue, false, false);
+			CacheGizmoDrawData(nn);
+			nn.RefreshConnections();
+			EditorUtility.SetDirty(nn);
+		}
+		if(layerRem > -1)
+		{
+			nn.RemoveLayer(layerRem, false);
+			CacheGizmoDrawData(nn);
+			nn.RefreshConnections();
+			EditorUtility.SetDirty(nn);
+		}
+
+		if(GUILayout.Button("Rebuild Network"))
 		{
 			ApplyNetworkChanges();
+			EditorUtility.SetDirty(nn);
 		}
 		if(GUILayout.Button("Reroll Connections"))
 		{
@@ -229,35 +265,54 @@ public class NeuralNetworkEditor : Editor
 		EditorUtility.SetDirty(nn);
 	}
 
-	bool NodeLayerMod(SerializedProperty nodeProp, string name)
+	bool NodeLayerMod(SerializedProperty nodeProp, int layer, string name)
 	{
 		int prevVal = nodeProp.intValue;
 		EditorGUILayout.BeginHorizontal();
 		nodeProp.intValue = Mathf.Max(EditorGUILayout.IntField(name, nodeProp.intValue), 1);
 
 		if (GUILayout.Button(" + "))
+		{
 			++nodeProp.intValue;
+			modifiedLayers.Add(new Vector2Int(layer, 1));
+			//if(!nn.AddNodeToLayer(layer, false))
+			//	Debug.Log("Failed to add node");
+		}
 
 		EditorGUI.BeginDisabledGroup(prevVal <= 1);
 		if (GUILayout.Button(" - "))
+		{
 			--nodeProp.intValue;
+			modifiedLayers.Add(new Vector2Int(layer, -1));
+			//if (!nn.RemoveNodeFromLayer(layer))
+			//	Debug.Log("Failed to remove node");
+		}
 		EditorGUI.EndDisabledGroup();
 
 		EditorGUILayout.EndHorizontal();
 		return (prevVal != nodeProp.intValue);
 	}
-	bool NodeLayerMod(SerializedProperty nodeProp, string name, out bool remove)
+	bool NodeLayerMod(SerializedProperty nodeProp, int layer, string name, out bool remove)
 	{
 		int prevVal = nodeProp.intValue;
 		EditorGUILayout.BeginHorizontal();
 		nodeProp.intValue = Mathf.Max(EditorGUILayout.IntField(name, nodeProp.intValue), 1);
 
 		if (GUILayout.Button(" + "))
+		{
 			++nodeProp.intValue;
-
+			modifiedLayers.Add(new Vector2Int(layer, 1));
+			//if (!nn.AddNodeToLayer(layer, false))
+			//	Debug.Log("Failed to add node");
+		}
 		EditorGUI.BeginDisabledGroup(prevVal <= 1);
 		if (GUILayout.Button(" - "))
+		{
 			--nodeProp.intValue;
+			modifiedLayers.Add(new Vector2Int(layer, -1));
+			//if (!nn.RemoveNodeFromLayer(layer))
+			//	Debug.Log("Failed to remove node");
+		}
 		EditorGUI.EndDisabledGroup();
 
 		remove = GUILayout.Button("Remove");

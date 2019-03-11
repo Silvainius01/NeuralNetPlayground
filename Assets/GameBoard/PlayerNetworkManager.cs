@@ -73,11 +73,15 @@ public class PlayerNetworkManager : MonoBehaviour
 		//return GameManager.instance.AttemptToBuyBuilding(player, node, building);
 	}
 
+	/// <summary>
+	/// Takes into acount our current resource pools/rates, the nodes resource rates, the distance to nearest player, and the distance to the most threatening player.
+	/// </summary>
+	/// <param name="desiredNode"></param>
+	/// <returns></returns>
 	public float EvaluateExpansion(out NodeController desiredNode)
 	{
 		int iIndex = 0;
 		float bestval = float.MinValue;
-
 
 		foreach(var res in GameManager.instance.resourceList)
 		{
@@ -97,6 +101,7 @@ public class PlayerNetworkManager : MonoBehaviour
 
 			expansionInputs[i] = kvp.Value.nearestOwnedDist;
 			expansionInputs[++i] = GameManager.instance.DistanceToNearestPlayerNode(kvp.Value, threatPlayer);
+			expansionInputs[++i] = kvp.Value.buildingCont.GetBuildingTypeCount(BUILDING_TYPE.ECONOMIC);
 
 			float val = nnExpansion.Evaluate(expansionInputs)[0];
 			if (val > bestval)
@@ -150,11 +155,21 @@ public class PlayerNetworkManager : MonoBehaviour
 		nnDevelopment.CopyNetworkFrom(pnm.nnDevelopment);
 		nnThreatLevel.CopyNetworkFrom(pnm.nnThreatLevel);
 	}
-	public void MutateNetworksAsexual(float mutationChance)
+	public string MutateNetworksAsexual(float mutationChance, float newNodeChance, float newLayerChance, bool randomWeights)
 	{
-		nnExpansion.MutateAsexual(mutationChance);
-		nnDevelopment.MutateAsexual(mutationChance);
-		nnThreatLevel.MutateAsexual(mutationChance);
+		string retval = "";
+
+		retval += MutateNetworkInternal(nnExpansion, "E", mutationChance, newNodeChance, newLayerChance, randomWeights);
+		retval += MutateNetworkInternal(nnDevelopment, "D", mutationChance, newNodeChance, newLayerChance, randomWeights);
+		retval += MutateNetworkInternal(nnThreatLevel, "T", mutationChance, newNodeChance, newLayerChance, randomWeights);
+		return retval;
+	}
+	string MutateNetworkInternal(NeuralNetwork nn, string prefix, float mutationChance, float newNodeChance, float newLayerChance, bool randomWeights)
+	{
+		string rv = nn.MutateAsexual(mutationChance, newNodeChance, newLayerChance, randomWeights);
+		if (rv.Length > 0)
+			rv = $"[{prefix}:{rv}]";
+		return rv;
 	}
 
 	public static PlayerNetworkManager Copy(string name, PlayerNetworkManager orig)
